@@ -37,6 +37,14 @@ h1 {
  * Styles for the deck of cards
  */
 
+.game-panel-show{
+    display: block;
+}
+
+.game-panel-hide{
+    display: none;
+}
+
 .deck {
     width: 660px;
     min-height: 680px;
@@ -107,3 +115,21 @@ h1 {
     float: right;
     cursor: pointer;
 }
+
+/*Style for win form*/
+.hide-win{    
+    display: none;
+}
+.show-win{
+    display: block;    
+}
+
+.fa-check-circle-o{
+    color: green;
+}
+
+#btn-restart{
+    margin-top: 50px;
+    cursor: pointer;
+}
+

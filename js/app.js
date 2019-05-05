@@ -62,9 +62,12 @@ function shuffle(array) {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 function buildGame(){
+    
     const cards = shuffle(cardsList);
      
     const containerCard = document.querySelector('.deck');    
+
+    containerCard.innerHTML = "";
 
     cards.forEach(function(card){        
         containerCard.insertAdjacentHTML(
@@ -76,36 +79,40 @@ function buildGame(){
     })    
 
     const itemsCard = document.querySelectorAll('.card');
-    itemsCard.forEach(function(itemCard){
-        itemCard.addEventListener('click', function(){
-
-            if(openedCards[0] === itemCard){
-                return;                
-            }
-
-            document.querySelector('.moves').textContent = moves++;
-            openCard(itemCard);
-        });
+    itemsCard.forEach(function(itemCard){        
+        itemCard.addEventListener('click', eventClick);
     })            
+
+    document.querySelector('.moves').textContent = 0;
 }
 
+const eventClick = function eventClickListener(event){       
+    openCard(event.target);    
+}
 
 function openCard(card){
-            
+                
     card.classList.add("open", "show");                
 
     openedCards.push(card);
 
     if(openedCards.length == 2){
                 
+        document.querySelector('.moves').textContent = ++moves;
+
+        const itemsCard = document.querySelectorAll('.card');
+        itemsCard.forEach(function(itemCard){
+            itemCard.removeEventListener('click', eventClick, false);
+        })  
+
         if(openedCards[0].childNodes[1].className == openedCards[1].childNodes[1].className){            
-            matchCards(openedCards);     
+            matchCards(openedCards);                 
         }else{
-            notMatchCards(openedCards);            
+            notMatchCards(openedCards);                        
         }
-
+                
         openedCards = [];
-
+                
         checkWin();        
     }    
 }
@@ -114,22 +121,44 @@ function matchCards(openedCards){
     openedCards[0].classList.add("match");                            
     openedCards[1].classList.add("match");       
     matchedCards++; 
+
+    const itemsCard = document.querySelectorAll('.card');
+    itemsCard.forEach(function(itemCard){
+        itemCard.addEventListener('click', eventClick);
+    }) 
 }
 
 function notMatchCards(openedCards){
     openedCards.forEach(card => {                    
-        setTimeout(function(){
+        setTimeout(function(){           
             card.classList.remove("open", "show");                    
+
+            const itemsCard = document.querySelectorAll('.card');
+            itemsCard.forEach(function(itemCard){
+                itemCard.addEventListener('click', eventClick);
+            }) 
+
         }, 1000)
     })
 }
 
 function checkWin(){
-    if(matchedCards == 8){
-        alert('You win')
+    if(matchedCards == 8){        
+        document.querySelector('#card-panel').className = "game-panel-hide";    
+        document.querySelector('#win-panel').className = "show-win";    
+
+        document.querySelector('.moves-win').textContent = moves;
+        matchedCards = 0;
     }
 }
 
-buildGame();
+document.addEventListener('DOMContentLoaded', function () {
+    buildGame();    
+});
 
+document.querySelector('#btn-restart').addEventListener('click', function(){    
+    document.querySelector('#card-panel').className = "game-panel-show";    
+    document.querySelector('#win-panel').className = "hide-win";      
 
+    buildGame();        
+})
