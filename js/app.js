@@ -1,7 +1,30 @@
 /*
+Constants
+*/
+var openedCards = [];
+
+
+/*
  * Create a list that holds all of your cards
  */
-
+const cardsList = [
+    'fa fa-diamond',
+    'fa fa-paper-plane-o',
+    'fa fa-anchor',
+    'fa fa-bolt',
+    'fa fa-cube',
+    'fa fa-anchor',
+    'fa fa-leaf',
+    'fa fa-bicycle',
+    'fa fa-diamond',
+    'fa fa-bomb',
+    'fa fa-leaf',
+    'fa fa-bomb',
+    'fa fa-bolt',
+    'fa fa-bicycle',
+    'fa fa-paper-plane-o',
+    'fa fa-cube'
+]
 
 /*
  * Display the cards on the page
@@ -21,7 +44,7 @@ function shuffle(array) {
         array[currentIndex] = array[randomIndex];
         array[randomIndex] = temporaryValue;
     }
-
+    
     return array;
 }
 
@@ -36,3 +59,60 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+function buildGame(){
+    const cards = shuffle(cardsList);
+     
+    const containerCard = document.querySelector('.deck');    
+
+    cards.forEach(function(card){        
+        containerCard.insertAdjacentHTML(
+            'afterbegin', 
+            `<li class="card">
+                <i class="${card}"></i>
+            </li>`
+        );
+    })    
+
+    const itemsCard = document.querySelectorAll('.card');
+    itemsCard.forEach(function(itemCard){
+        itemCard.addEventListener('click', function(){
+            openCard(itemCard);
+        });
+    })            
+}
+
+
+function openCard(card){
+    
+    card.classList.add("open", "show");                
+
+    openedCards.push(card);
+
+    if(openedCards.length == 2){
+                
+        if(openedCards[0].childNodes[1].className == openedCards[1].childNodes[1].className){
+            matchCards(openedCards);     
+        }else{
+            notMatchCards(openedCards);            
+        }
+                                              
+        openedCards = [];
+    }    
+}
+
+function matchCards(openedCards){
+    openedCards[0].classList.add("match");                            
+    openedCards[1].classList.add("match");     
+}
+
+function notMatchCards(openedCards){
+    openedCards.forEach(card => {                    
+        setTimeout(function(){
+            card.classList.remove("open", "show");                    
+        }, 500)
+    })
+}
+
+buildGame();
+
+
