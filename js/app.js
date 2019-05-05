@@ -79,10 +79,10 @@ function buildGame(){
     })    
 
     const itemsCard = document.querySelectorAll('.card');
-    itemsCard.forEach(function(itemCard){        
-        itemCard.addEventListener('click', eventClick);
+    itemsCard.forEach(function(itemCard){                    
+        itemCard.addEventListener('click', eventClick);        
     })            
-
+              
     document.querySelector('.moves').textContent = 0;
 }
 
@@ -91,11 +91,15 @@ const eventClick = function eventClickListener(event){
 }
 
 function openCard(card){
-                
+
+    if(openedCards[0] == card){
+        return;
+    }
+
     card.classList.add("open", "show");                
 
     openedCards.push(card);
-
+    
     if(openedCards.length == 2){
                 
         document.querySelector('.moves').textContent = ++moves;
