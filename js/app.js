@@ -63,6 +63,10 @@ function shuffle(array) {
  */
 function buildGame(){
     
+    openedCards = [];
+    matchedCards = 0;
+    moves = 0;
+
     const cards = shuffle(cardsList);
      
     const containerCard = document.querySelector('.deck');    
@@ -166,3 +170,8 @@ document.querySelector('#btn-restart').addEventListener('click', function(){
 
     buildGame();        
 })
+
+
+document.querySelector('.restart').addEventListener('click', function(){
+    buildGame();        
+});
