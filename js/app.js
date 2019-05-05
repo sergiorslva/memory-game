@@ -2,6 +2,8 @@
 Constants
 */
 var openedCards = [];
+var matchedCards = 0;
+var moves = 0;
 
 
 /*
@@ -76,6 +78,12 @@ function buildGame(){
     const itemsCard = document.querySelectorAll('.card');
     itemsCard.forEach(function(itemCard){
         itemCard.addEventListener('click', function(){
+
+            if(openedCards[0] === itemCard){
+                return;                
+            }
+
+            document.querySelector('.moves').textContent = moves++;
             openCard(itemCard);
         });
     })            
@@ -83,34 +91,43 @@ function buildGame(){
 
 
 function openCard(card){
-    
+            
     card.classList.add("open", "show");                
 
     openedCards.push(card);
 
     if(openedCards.length == 2){
                 
-        if(openedCards[0].childNodes[1].className == openedCards[1].childNodes[1].className){
+        if(openedCards[0].childNodes[1].className == openedCards[1].childNodes[1].className){            
             matchCards(openedCards);     
         }else{
             notMatchCards(openedCards);            
         }
-                                              
+
         openedCards = [];
+
+        checkWin();        
     }    
 }
 
 function matchCards(openedCards){
     openedCards[0].classList.add("match");                            
-    openedCards[1].classList.add("match");     
+    openedCards[1].classList.add("match");       
+    matchedCards++; 
 }
 
 function notMatchCards(openedCards){
     openedCards.forEach(card => {                    
         setTimeout(function(){
             card.classList.remove("open", "show");                    
-        }, 500)
+        }, 1000)
     })
+}
+
+function checkWin(){
+    if(matchedCards == 8){
+        alert('You win')
+    }
 }
 
 buildGame();
