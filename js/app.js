@@ -88,6 +88,7 @@ function buildGame(){
     })            
               
     document.querySelector('.moves').textContent = 0;
+    restartStars();
 }
 
 const eventClick = function eventClickListener(event){       
@@ -121,6 +122,8 @@ function openCard(card){
                 
         openedCards = [];
                 
+        fillStars();
+
         checkWin();        
     }    
 }
@@ -161,10 +164,10 @@ function checkWin(){
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    buildGame();    
+    buildGame();            
 });
 
-document.querySelector('#btn-restart').addEventListener('click', function(){    
+document.querySelector('#btn-newgame').addEventListener('click', function(){    
     document.querySelector('#card-panel').className = "game-panel-show";    
     document.querySelector('#win-panel').className = "hide-win";      
 
@@ -173,5 +176,25 @@ document.querySelector('#btn-restart').addEventListener('click', function(){
 
 
 document.querySelector('.restart').addEventListener('click', function(){
-    buildGame();        
+    buildGame();                    
 });
+
+function fillStars(){
+
+    const starsTwo = document.querySelector('#start-two');
+    const starsThree = document.querySelector('#start-three');
+
+    className = "fa fa-star-o";
+    
+    if(moves > 12 && moves <= 16){
+        starsThree.className = className;
+    }else if (moves > 16){
+        starsThree.className = className;
+        starsTwo.className = className;
+    }        
+}
+
+function restartStars(){
+    document.querySelector('#start-two').className = "fa fa-star";
+    document.querySelector('#start-three').className = "fa fa-star";
+}
