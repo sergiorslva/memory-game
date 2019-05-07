@@ -4,6 +4,7 @@ Constants
 var openedCards = [];
 var matchedCards = 0;
 var moves = 0;
+var starsCount = 0;
 
 
 /*
@@ -46,7 +47,7 @@ function shuffle(array) {
         array[currentIndex] = array[randomIndex];
         array[randomIndex] = temporaryValue;
     }
-    
+
     return array;
 }
 
@@ -61,140 +62,147 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
-function buildGame(){
-    
+function buildGame() {
+
     openedCards = [];
     matchedCards = 0;
     moves = 0;
 
     const cards = shuffle(cardsList);
-     
-    const containerCard = document.querySelector('.deck');    
+
+    const containerCard = document.querySelector('.deck');
 
     containerCard.innerHTML = "";
 
-    cards.forEach(function(card){        
+    cards.forEach(function (card) {
         containerCard.insertAdjacentHTML(
-            'afterbegin', 
+            'afterbegin',
             `<li class="card">
                 <i class="${card}"></i>
             </li>`
         );
-    })    
+    })
 
     const itemsCard = document.querySelectorAll('.card');
-    itemsCard.forEach(function(itemCard){                    
-        itemCard.addEventListener('click', eventClick);        
-    })            
-              
+    itemsCard.forEach(function (itemCard) {
+        itemCard.addEventListener('click', eventClick);
+    })
+
     document.querySelector('.moves').textContent = 0;
     restartStars();
 }
 
-const eventClick = function eventClickListener(event){       
-    openCard(event.target);    
+const eventClick = function eventClickListener(event) {
+    openCard(event.target);
 }
 
-function openCard(card){
+function openCard(card) {
 
-    if(openedCards[0] == card){
+    if (openedCards[0] == card) {
         return;
     }
 
-    card.classList.add("open", "show");                
+    card.classList.add("open", "show");
 
     openedCards.push(card);
-    
-    if(openedCards.length == 2){
-                
+
+    if (openedCards.length == 2) {
+
         document.querySelector('.moves').textContent = ++moves;
 
         const itemsCard = document.querySelectorAll('.card');
-        itemsCard.forEach(function(itemCard){
+        itemsCard.forEach(function (itemCard) {
             itemCard.removeEventListener('click', eventClick, false);
-        })  
+        })
 
-        if(openedCards[0].childNodes[1].className == openedCards[1].childNodes[1].className){            
-            matchCards(openedCards);                 
-        }else{
-            notMatchCards(openedCards);                        
+        if (openedCards[0].childNodes[1].className == openedCards[1].childNodes[1].className) {
+            matchCards(openedCards);
+        } else {
+            notMatchCards(openedCards);
         }
-                
+
         openedCards = [];
-                
+
         fillStars();
 
-        checkWin();        
-    }    
+        checkWin();
+    }
 }
 
-function matchCards(openedCards){
-    openedCards[0].classList.add("match");                            
-    openedCards[1].classList.add("match");       
-    matchedCards++; 
+function matchCards(openedCards) {
+    openedCards[0].classList.add("match");
+    openedCards[1].classList.add("match");
+    matchedCards++;
 
     const itemsCard = document.querySelectorAll('.card');
-    itemsCard.forEach(function(itemCard){
+    itemsCard.forEach(function (itemCard) {
         itemCard.addEventListener('click', eventClick);
-    }) 
+    })
 }
 
-function notMatchCards(openedCards){
-    openedCards.forEach(card => {                    
-        setTimeout(function(){           
-            card.classList.remove("open", "show");                    
+function notMatchCards(openedCards) {
+    openedCards.forEach(card => {
+        setTimeout(function () {
+            card.classList.remove("open", "show");
 
             const itemsCard = document.querySelectorAll('.card');
-            itemsCard.forEach(function(itemCard){
+            itemsCard.forEach(function (itemCard) {
                 itemCard.addEventListener('click', eventClick);
-            }) 
+            })
 
         }, 1000)
     })
 }
 
-function checkWin(){
-    if(matchedCards == 8){        
-        document.querySelector('#card-panel').className = "game-panel-hide";    
-        document.querySelector('#win-panel').className = "show-win";    
+function checkWin() {
+    if (matchedCards == 8) {
+        document.querySelector('#card-panel').className = "game-panel-hide";
+        document.querySelector('#win-panel').className = "show-win";
 
         document.querySelector('.moves-win').textContent = moves;
+        document.querySelector('.start-count').textContent = starsCount;
+
         matchedCards = 0;
     }
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    buildGame();            
+    buildGame();
 });
 
-document.querySelector('#btn-newgame').addEventListener('click', function(){    
-    document.querySelector('#card-panel').className = "game-panel-show";    
-    document.querySelector('#win-panel').className = "hide-win";      
+document.querySelector('#btn-newgame').addEventListener('click', function () {
+    document.querySelector('#card-panel').className = "game-panel-show";
+    document.querySelector('#win-panel').className = "hide-win";
 
-    buildGame();        
+    buildGame();
 })
 
 
-document.querySelector('.restart').addEventListener('click', function(){
-    buildGame();                    
+document.querySelector('.restart').addEventListener('click', function () {
+    buildGame();
 });
 
-function fillStars(){
+function fillStars() {
 
     const starsTwo = document.querySelector('#start-two');
     const starsThree = document.querySelector('#start-three');
 
     className = "fa fa-star-o";
-    
-    if(moves > 12 && moves <= 16){
+
+    if (moves > 12 && moves <= 16) {
         starsThree.className = className;
-    }else if (moves > 16){
+        starsCount = 2;
+    } else if (moves > 16) {
         starsThree.className = className;
         starsTwo.className = className;
-    }        
+        starsCount = 1;
+    }else{
+        starsCount = 3;
+    }
+
 }
 
-function restartStars(){
+function restartStars() {
     document.querySelector('#start-two').className = "fa fa-star";
     document.querySelector('#start-three').className = "fa fa-star";
 }
