@@ -5,7 +5,9 @@ var openedCards = [];
 var matchedCards = 0;
 var moves = 0;
 var starsCount = 0;
-
+var timeElapsed = new Date(0, 0, 0, 0, 0, 0);
+var timer = null;
+var started = false;
 
 /*
  * Create a list that holds all of your cards
@@ -77,9 +79,13 @@ function buildGame() {
     cards.forEach(function (card) {
         containerCard.insertAdjacentHTML(
             'afterbegin',
-            `<li class="card">
-                <i class="${card}"></i>
-            </li>`
+            `<div class="row> 
+                <div class="col-md-3">
+                    <li class="card">
+                        <i class="${card}"></i>
+                    </li>
+                </div>
+            </div>`
         );
     })
 
@@ -97,6 +103,11 @@ const eventClick = function eventClickListener(event) {
 }
 
 function openCard(card) {
+    
+    if(!started){
+        startTimer();
+        started = true;
+    }
 
     if (openedCards[0] == card) {
         return;
@@ -156,13 +167,16 @@ function notMatchCards(openedCards) {
 
 function checkWin() {
     if (matchedCards == 8) {
+        
+        stopTimer();
+        matchedCards = 0;        
+
         document.querySelector('#card-panel').className = "game-panel-hide";
         document.querySelector('#win-panel').className = "show-win";
 
-        document.querySelector('.moves-win').textContent = moves;
-        document.querySelector('.start-count').textContent = starsCount;
-
-        matchedCards = 0;
+        document.querySelector('.moves-win').innerHTML = `<strong>${moves}</strong>`;
+        document.querySelector('.start-count').innerHTML = `<strong>${starsCount}</strong>`;
+        document.querySelector('.timer-final').innerHTML = `&nbsp ${formatTime(timeElapsed)}`;                
     }
 }
 
@@ -189,10 +203,10 @@ function fillStars() {
 
     className = "fa fa-star-o";
 
-    if (moves > 12 && moves <= 16) {
+    if (moves > 16 && moves <= 20) {
         starsThree.className = className;
         starsCount = 2;
-    } else if (moves > 16) {
+    } else if (moves > 21) {
         starsThree.className = className;
         starsTwo.className = className;
         starsCount = 1;
@@ -205,4 +219,23 @@ function fillStars() {
 function restartStars() {
     document.querySelector('#start-two').className = "fa fa-star";
     document.querySelector('#start-three').className = "fa fa-star";
+}
+
+function startTimer(){            
+    timer = setInterval(function(){
+        timeElapsed.setSeconds(timeElapsed.getSeconds() + 1);        
+        document.getElementById('timer-count').textContent = formatTime(timeElapsed);
+    }, 1000);   
+}
+
+function stopTimer(){    
+    clearInterval(timer);    
+}
+
+function formatTime(time){
+    const hour = time.getHours().toString().padStart(2, '0');
+    const minute = time.getMinutes().toString().padStart(2, '0');
+    const second = time.getSeconds().toString().padStart(2, '0');
+    
+    return `${hour}:${minute}:${second}`;
 }

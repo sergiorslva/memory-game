@@ -113,12 +113,16 @@ h1 {
 
 .score-panel .restart {
     float: right;
-    cursor: pointer;
+    cursor: pointer;    
+}
+
+.score-panel .timer {        
+    text-align: center;
 }
 
 /*Style for win form*/
 .win-panel{
-    margin-top: 100px;
+    margin-top: 200px;
 }
 
 .hide-win{    

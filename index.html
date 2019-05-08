@@ -13,7 +13,7 @@
 </head>
 
 <body>
-
+    
     <div id="card-panel" class="game-panel">
         <div class="container">
             <header>
@@ -21,7 +21,7 @@
             </header>
 
             <section class="score-panel">
-                              
+
                 <ul class="stars">
                     <li><i id="start-one" class="fa fa-star"></i></li>
                     <li><i id="start-two" class="fa fa-star"></i></li>
@@ -29,12 +29,17 @@
                 </ul>
 
                 <span class="moves">0</span> Moves
-                
+
                 <div class="restart">
                     <i class="fa fa-repeat"></i>
                 </div>
+
+                <div class="timer">
+                    <span id="timer-count">0</span>
+                </div>
+
             </section>
-                                    
+
             <ul class="deck"></ul>
         </div>
     </div>
@@ -48,13 +53,18 @@
                 <h1>Congratulations! You won!</h1>
             </div>
             <div class="d-inline-flex">
-                <span>With <span class="moves-win">0</span> Moves and <span class="start-count">0</span> Star(s)</span></span>
+                <span>With
+                    <span class="moves-win">0</span> Moves and                
+                    <span class="start-count">0</span> Star(s)                                  
+                </span>
+            </div>
+            <div class="d-inline-flex">
+                Total time:<strong><span class="timer-final">0</span></strong>
             </div>
             <div class="d-inline-flex">
                 <buttton class="btn btn-success" id="btn-newgame">Play again</buttton>
             </div>
         </div>
-    </div>
     </div>
 
     <script src="js/app.js"></script>
