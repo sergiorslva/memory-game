@@ -53,7 +53,6 @@ function shuffle(array) {
     return array;
 }
 
-
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
@@ -76,18 +75,21 @@ function buildGame() {
 
     containerCard.innerHTML = "";
 
+    const cardFragment = document.createDocumentFragment();
+
     cards.forEach(function (card) {
-        containerCard.insertAdjacentHTML(
-            'afterbegin',
-            `<div class="row> 
-                <div class="col-md-3">
-                    <li class="card">
-                        <i class="${card}"></i>
-                    </li>
-                </div>
-            </div>`
-        );
+        const cardElement = document.createElement('li');
+        cardElement.className = "card";
+
+        const cardContent = document.createElement('i');
+        cardContent.className = card;
+
+        cardElement.appendChild(cardContent);
+
+        cardFragment.appendChild(cardElement);
     })
+
+    containerCard.appendChild(cardFragment);
 
     const itemsCard = document.querySelectorAll('.card');
     itemsCard.forEach(function (itemCard) {
@@ -125,8 +127,8 @@ function openCard(card) {
         itemsCard.forEach(function (itemCard) {
             itemCard.removeEventListener('click', eventClick, false);
         })
-
-        if (openedCards[0].childNodes[1].className == openedCards[1].childNodes[1].className) {
+        
+        if(openedCards[0].childNodes[0].className == openedCards[1].childNodes[0].className){
             matchCards(openedCards);
         } else {
             notMatchCards(openedCards);
