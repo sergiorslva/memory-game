@@ -7,7 +7,6 @@ var moves = 0;
 var starsCount = 0;
 var timeElapsed = new Date(0, 0, 0, 0, 0, 0);
 var timer = null;
-var started = false;
 
 /*
  * Create a list that holds all of your cards
@@ -64,11 +63,13 @@ function shuffle(array) {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 function buildGame() {
+    
+    refreshTimer();
 
     openedCards = [];
     matchedCards = 0;
     moves = 0;
-
+    
     const cards = shuffle(cardsList);
 
     const containerCard = document.querySelector('.deck');
@@ -105,12 +106,7 @@ const eventClick = function eventClickListener(event) {
 }
 
 function openCard(card) {
-    
-    if(!started){
-        startTimer();
-        started = true;
-    }
-
+     
     if (openedCards[0] == card) {
         return;
     }
@@ -139,6 +135,10 @@ function openCard(card) {
         fillStars();
 
         checkWin();
+
+        if(moves == 1){
+            startTimer();        
+        }
     }
 }
 
@@ -195,7 +195,7 @@ document.querySelector('#btn-newgame').addEventListener('click', function () {
 
 
 document.querySelector('.restart').addEventListener('click', function () {
-    buildGame();
+    buildGame();        
 });
 
 function fillStars() {
@@ -221,17 +221,24 @@ function fillStars() {
 function restartStars() {
     document.querySelector('#start-two').className = "fa fa-star";
     document.querySelector('#start-three').className = "fa fa-star";
+    
 }
 
 function startTimer(){            
-    timer = setInterval(function(){
+    timer = setInterval(function(){        
         timeElapsed.setSeconds(timeElapsed.getSeconds() + 1);        
-        document.getElementById('timer-count').textContent = formatTime(timeElapsed);
+        document.getElementById('timer-count').textContent = formatTime(timeElapsed);        
     }, 1000);   
 }
 
 function stopTimer(){    
     clearInterval(timer);    
+}
+
+function refreshTimer(){
+    stopTimer();
+    timeElapsed = new Date(0, 0, 0, 0, 0, 0);
+    document.getElementById('timer-count').textContent = "0";
 }
 
 function formatTime(time){
